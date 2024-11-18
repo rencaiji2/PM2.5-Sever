@@ -7,6 +7,7 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     WindowsManager::getInstance()->m_UCParent = ui->widget_main;
+    TcpServer::getInstance();
 }
 
 MainWindow::~MainWindow()
