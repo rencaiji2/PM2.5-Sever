@@ -6,9 +6,7 @@ Widget::Widget(QWidget *parent)
     , ui(new Ui::Widget)
 {
     ui->setupUi(this);
-    m_tcpsever = new TcpServer(this);
-    connect(m_tcpsever,&TcpServer::sendClientData,this,&Widget::clientDataRcevice);
-    m_arr = "111111222xxxrrrd\r";
+    connect(TcpServer::getInstance(),&TcpServer::sendClientData,this,&Widget::clientDataRcevice);
     m_isStartSet = false;
     m_uint8Vector = {0xea,0xea,0,0,0,0,0,0xeb,0xeb};
 }
@@ -78,7 +76,7 @@ void Widget::on_pushButton_one_clicked()
     m_uint8Vector[3] = senddata.isNowConcentration_send;
     m_uint8Vector[4] = senddata.acquisitionInterval_send;
 
-    m_tcpsever->sendData(m_uint8Vector,8081);
+    TcpServer::getInstance()->sendData(m_uint8Vector,8081);
 }
 
 void Widget::on_pushButton_two_clicked()
@@ -93,7 +91,7 @@ void Widget::on_pushButton_two_clicked()
     m_uint8Vector[3] = senddata.isNowConcentration_send;
     m_uint8Vector[4] = senddata.acquisitionInterval_send;
 
-    m_tcpsever->sendData(m_uint8Vector,8082);
+    TcpServer::getInstance()->sendData(m_uint8Vector,8082);
 }
 
 void Widget::on_checkBox_startSet_clicked(bool checked)

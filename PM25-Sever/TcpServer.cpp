@@ -1,5 +1,7 @@
 #include "TcpServer.h"
 
+TcpServer* TcpServer::instance = nullptr;
+
 TcpServer::TcpServer(QObject *parent) : QObject(parent)
 {
     for (int port = 8081; port <= 8088; ++port) {

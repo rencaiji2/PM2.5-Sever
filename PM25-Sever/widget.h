@@ -29,8 +29,6 @@ private slots:
     void on_checkBox_startSet_clicked(bool checked);
 
 private:
-    TcpServer *m_tcpsever;
-    QByteArray m_arr;
     bool m_isStartSet;
     std::vector<uint8_t> m_uint8Vector;
 
