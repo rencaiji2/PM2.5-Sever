@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QWidget" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1140</width>
+    <height>640</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <widget class="QWidget" name="widget_NavigationBar" native="true">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>560</y>
+     <width>1140</width>
+     <height>80</height>
+    </rect>
+   </property>
+   <widget class="QPushButton" name="btn_main">
+    <property name="geometry">
+     <rect>
+      <x>1</x>
+      <y>5</y>
+      <width>120</width>
+      <height>74</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>主页</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="btn_draw">
+    <property name="geometry">
+     <rect>
+      <x>161</x>
+      <y>5</y>
+      <width>120</width>
+      <height>74</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>曲线图</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="btn_export">
+    <property name="geometry">
+     <rect>
+      <x>321</x>
+      <y>5</y>
+      <width>120</width>
+      <height>74</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>导出</string>
+    </property>
+   </widget>
+   <widget class="Line" name="line">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>0</y>
+      <width>1140</width>
+      <height>3</height>
+     </rect>
+    </property>
+    <property name="orientation">
+     <enum>Qt::Horizontal</enum>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QWidget" name="widget_main" native="true">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>1140</width>
+     <height>560</height>
+    </rect>
+   </property>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

@@ -32,6 +32,11 @@ struct SendToClient
     }
 };
 
+enum UCKeys
+{
+    HomePageKey = 1,
+};
+
 
 
 #endif // PUBLICSTRUCT_H
