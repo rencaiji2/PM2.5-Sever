@@ -21,6 +21,13 @@ public:
 private slots:
     void on_btn_main_clicked();
 
+    void on_btn_draw_clicked();
+
+    void on_btn_export_clicked();
+
+private:
+    void homeBtnStatusChange(int num);
+
 private:
     Ui::MainWindow *ui;
 };

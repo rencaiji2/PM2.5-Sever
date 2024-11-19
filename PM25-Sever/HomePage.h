@@ -22,6 +22,7 @@ private slots:
 
 private:
     void clientDataRcevice(ClientData data);
+    void btnSetEnable(bool bl);
 
 private:
     Ui::HomePage *ui;

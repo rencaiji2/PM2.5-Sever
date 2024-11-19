@@ -30,8 +30,11 @@ HomePage::HomePage(QWidget *parent) :
     m_stringToInt_hash.insert("btn_set_seven",7);
     m_stringToInt_hash.insert("btn_set_eight",8);
 
-    ui->btn_set_one->setEnabled(false);
+    btnSetEnable(false);
     connect(ui->btn_set_one,&QPushButton::clicked, this, &HomePage::on_setbtn_clicked);
+    connect(ui->btn_set_two,&QPushButton::clicked, this, &HomePage::on_setbtn_clicked);
+    connect(ui->btn_set_three,&QPushButton::clicked, this, &HomePage::on_setbtn_clicked);
+    connect(ui->btn_set_four,&QPushButton::clicked, this, &HomePage::on_setbtn_clicked);
     m_uint8Vector = {0xea,0xea,0,0,0,0,0,0xeb,0xeb};
 }
 
@@ -40,18 +43,26 @@ HomePage::~HomePage()
     delete ui;
 }
 
+void HomePage::btnSetEnable(bool bl)
+{
+    ui->btn_set_one->setEnabled(bl);
+    ui->btn_set_two->setEnabled(bl);
+    ui->btn_set_three->setEnabled(bl);
+    ui->btn_set_four->setEnabled(bl);
+}
+
 void HomePage::on_btn_set_clicked()
 {
     if(m_isCheckSet == false)
     {
         m_isCheckSet = true;
-        ui->btn_set_one->setEnabled(true);
+        btnSetEnable(true);
         ui->btn_set->setStyleSheet("font-size: 20pt; color: black;background-color: rgb(51, 153, 255);");
     }
     else
     {
         m_isCheckSet = false;
-        ui->btn_set_one->setEnabled(false);
+        btnSetEnable(false);
         ui->btn_set->setStyleSheet("font-size: 20pt; color: white;background-color: gray;");
     }
 }
