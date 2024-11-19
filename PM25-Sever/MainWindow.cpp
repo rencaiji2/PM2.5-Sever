@@ -25,6 +25,7 @@ void MainWindow::on_btn_main_clicked()
 void MainWindow::on_btn_draw_clicked()
 {
     homeBtnStatusChange(2);
+    WindowsManager::getInstance()->ShowUC(UCKeys::DrawCurveKey);  //显示曲线
 }
 
 void MainWindow::on_btn_export_clicked()

@@ -35,6 +35,7 @@ struct SendToClient
 enum UCKeys
 {
     HomePageKey = 1,
+    DrawCurveKey,
 };
 
 

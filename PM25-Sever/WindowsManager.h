@@ -2,6 +2,7 @@
 #define WINDOWSMANAGER_H
 #include "MainWindow.h"
 #include "HomePage.h"
+#include "DrawCurve.h"
 
 class WindowsManager
 {
@@ -28,6 +29,7 @@ private:
     static WindowsManager* instance; // 静态指针，保存单例实例
 
     HomePage  *m_homePage;
+    DrawCurve *m_drawCurve;
 };
 
 #endif // WINDOWSMANAGER_H

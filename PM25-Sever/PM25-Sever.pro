@@ -1,4 +1,4 @@
-QT       += core gui network
+QT       += core gui network printsupport
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -16,22 +16,27 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    DrawCurve.cpp \
     HomePage.cpp \
     MainWindow.cpp \
     TcpServer.cpp \
     WindowsManager.cpp \
     main.cpp \
+    qcustomplot.cpp \
     widget.cpp
 
 HEADERS += \
+    DrawCurve.h \
     HomePage.h \
     MainWindow.h \
     PublicStruct.h \
     TcpServer.h \
     WindowsManager.h \
+    qcustomplot.h \
     widget.h
 
 FORMS += \
+    DrawCurve.ui \
     HomePage.ui \
     MainWindow.ui \
     widget.ui
