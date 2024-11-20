@@ -1,4 +1,4 @@
-QT       += core gui network printsupport
+QT       += core gui network printsupport concurrent
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
