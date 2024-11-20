@@ -6,6 +6,7 @@ WindowsManager::WindowsManager()
 {
     m_homePage = new HomePage;
     m_drawCurve = new DrawCurve;
+    m_exportData = new ExportData;
 }
 
 void WindowsManager::ShowUC(UCKeys key)
@@ -33,6 +34,9 @@ QWidget * WindowsManager::GetUC(UCKeys key)
             break;
         case DrawCurveKey:
             return m_drawCurve;
+            break;
+        case ExportDataKey:
+            return m_exportData;
             break;
         default:
             return nullptr;

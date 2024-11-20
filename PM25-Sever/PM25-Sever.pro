@@ -17,6 +17,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
     DrawCurve.cpp \
+    ExportData.cpp \
     HomePage.cpp \
     MainWindow.cpp \
     TcpServer.cpp \
@@ -27,6 +28,7 @@ SOURCES += \
 
 HEADERS += \
     DrawCurve.h \
+    ExportData.h \
     HomePage.h \
     MainWindow.h \
     PublicStruct.h \
@@ -37,6 +39,7 @@ HEADERS += \
 
 FORMS += \
     DrawCurve.ui \
+    ExportData.ui \
     HomePage.ui \
     MainWindow.ui \
     widget.ui

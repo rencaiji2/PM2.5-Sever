@@ -31,6 +31,7 @@ void MainWindow::on_btn_draw_clicked()
 void MainWindow::on_btn_export_clicked()
 {
     homeBtnStatusChange(3);
+    WindowsManager::getInstance()->ShowUC(UCKeys::ExportDataKey);
 }
 
 void MainWindow::homeBtnStatusChange(int num)

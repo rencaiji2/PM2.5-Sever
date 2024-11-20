@@ -3,6 +3,7 @@
 #include "MainWindow.h"
 #include "HomePage.h"
 #include "DrawCurve.h"
+#include "ExportData.h"
 
 class WindowsManager
 {
@@ -30,6 +31,7 @@ private:
 
     HomePage  *m_homePage;
     DrawCurve *m_drawCurve;
+    ExportData *m_exportData;
 };
 
 #endif // WINDOWSMANAGER_H
