@@ -21,6 +21,19 @@ private slots:
     void clientDataRcevice(ClientData data);
     void on_timer_slot();
 
+    void on_checkBox_1_clicked(bool checked);
+
+    void on_checkBox_2_clicked(bool checked);
+
+    void on_checkBox_3_clicked(bool checked);
+
+    void on_checkBox_4_clicked(bool checked);
+
+    void on_comboBox_currentIndexChanged(int index);
+
+private:
+    void Replot();
+
 private:
     Ui::DrawCurve *ui;
     QCustomPlot *m_customPlot;
@@ -31,6 +44,7 @@ private:
     QHash<int,QCPGraph *> m_intToQCPGraph;
     QHash<int,QList<QVector<double>>> m_drawData;
     QTimer m_timer;
+    bool m_isCanRefensh;  //是否可以刷新曲线
 };
 
 #endif // DRAWCURVE_H
