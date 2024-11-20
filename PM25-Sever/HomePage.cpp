@@ -10,6 +10,13 @@ HomePage::HomePage(QWidget *parent) :
     ui->btn_set->setStyleSheet("font-size: 20pt; color: white;background-color: gray;");
     m_isCheckSet = false;
 
+    for(int i=1; i<9; i++)
+    {
+        m_isAllOnline.insert(i,false);
+    }
+    connect(&m_timer, &QTimer::timeout,this,&HomePage::on_timer_slot);
+    m_timer.start(30000);
+
     connect(TcpServer::getInstance(),&TcpServer::sendClientData,this,&HomePage::clientDataRcevice);
 
     m_numToString_hash.insert(1,"one");
@@ -36,6 +43,7 @@ HomePage::HomePage(QWidget *parent) :
     connect(ui->btn_set_three,&QPushButton::clicked, this, &HomePage::on_setbtn_clicked);
     connect(ui->btn_set_four,&QPushButton::clicked, this, &HomePage::on_setbtn_clicked);
     m_uint8Vector = {0xea,0xea,0,0,0,0,0,0xeb,0xeb};
+
 }
 
 HomePage::~HomePage()
@@ -70,8 +78,14 @@ void HomePage::on_btn_set_clicked()
 void HomePage::clientDataRcevice(ClientData data)
 {
     QString numEnglish = m_numToString_hash.value(data.deviceNum);
+    if(m_isAllOnline.contains(data.deviceNum))
+    {
+        m_isAllOnline[data.deviceNum] = true;
+    }
     if(numEnglish != NULL)
     {
+        this->findChild<QLabel*>("label_isOnline_"+numEnglish)->setText("设备已上线");
+        this->findChild<QLabel*>("label_isOnline_"+numEnglish)->setStyleSheet("color:red;");
         this->findChild<QLabel*>("label_result_"+numEnglish)->setText(QString::number(data.result)+"μg/m³");
         if(!m_isCheckSet)
         {
@@ -99,5 +113,24 @@ void HomePage::on_setbtn_clicked()
 
            TcpServer::getInstance()->sendData(m_uint8Vector,8080 + senddata.deviceNum_send);
        }
+    }
+}
+
+void HomePage::on_timer_slot()
+{
+    for(int i=1; i<3; i++)
+    {
+        QString numEnglish = m_numToString_hash.value(i);
+        if(m_isAllOnline[i] == true)
+        {
+            this->findChild<QLabel*>("label_isOnline_"+numEnglish)->setText("设备已上线");
+            this->findChild<QLabel*>("label_isOnline_"+numEnglish)->setStyleSheet("color:red;");
+            m_isAllOnline[i] = false;
+        }
+        else
+        {
+            this->findChild<QLabel*>("label_isOnline_"+numEnglish)->setText("设备已下线！");
+            this->findChild<QLabel*>("label_isOnline_"+numEnglish)->setStyleSheet("color:gray;");
+        }
     }
 }

@@ -231,8 +231,11 @@
     </item>
     <item>
      <widget class="QLabel" name="label_isOnline_two">
+      <property name="styleSheet">
+       <string notr="true">QLabel{color:gray;}</string>
+      </property>
       <property name="text">
-       <string>设备已掉线</string>
+       <string>设备已掉线！</string>
       </property>
       <property name="alignment">
        <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
@@ -440,8 +443,11 @@
     </item>
     <item>
      <widget class="QLabel" name="label_isOnline_three">
+      <property name="styleSheet">
+       <string notr="true">QLabel{color:gray;}</string>
+      </property>
       <property name="text">
-       <string>设备已掉线</string>
+       <string>设备已掉线！</string>
       </property>
       <property name="alignment">
        <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
@@ -649,8 +655,11 @@
     </item>
     <item>
      <widget class="QLabel" name="label_isOnline_four">
+      <property name="styleSheet">
+       <string notr="true">QLabel{color:gray;}</string>
+      </property>
       <property name="text">
-       <string>设备已掉线</string>
+       <string>设备已掉线！</string>
       </property>
       <property name="alignment">
        <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
@@ -659,7 +668,7 @@
     </item>
    </layout>
   </widget>
-  <widget class="QWidget" name="">
+  <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
      <x>10</x>
@@ -858,8 +867,11 @@
     </item>
     <item>
      <widget class="QLabel" name="label_isOnline_one">
+      <property name="styleSheet">
+       <string notr="true">QLabel{color:gray;}</string>
+      </property>
       <property name="text">
-       <string>设备已掉线</string>
+       <string>设备已掉线！</string>
       </property>
       <property name="alignment">
        <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
