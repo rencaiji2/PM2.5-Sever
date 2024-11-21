@@ -10,7 +10,7 @@ DrawCurve::DrawCurve(QWidget *parent) :
 
     m_customPlot = new QCustomPlot(this);
     m_customPlot->setParent(ui->widget_customplot);
-    m_customPlot->resize(900,460);
+    m_customPlot->resize(ui->widget_customplot->size());
     m_customPlot->setInteractions(QCP::iRangeDrag | QCP::iRangeZoom | QCP::iSelectPlottables);//添加鼠标拖放支持、滚轮缩放支持
     m_customPlot->xAxis->setRange(QDateTime::currentSecsSinceEpoch()-10,QDateTime::currentSecsSinceEpoch()+10);
     m_customPlot->yAxis->setRange(0,1000);

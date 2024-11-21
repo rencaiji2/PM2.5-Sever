@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1140</width>
-    <height>560</height>
+    <width>1800</width>
+    <height>720</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -879,6 +879,16 @@
      </widget>
     </item>
    </layout>
+  </widget>
+  <widget class="QWidget" name="widget_curve" native="true">
+   <property name="geometry">
+    <rect>
+     <x>1100</x>
+     <y>20</y>
+     <width>680</width>
+     <height>480</height>
+    </rect>
+   </property>
   </widget>
  </widget>
  <resources/>

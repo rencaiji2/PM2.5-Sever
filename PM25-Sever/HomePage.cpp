@@ -19,6 +19,8 @@ HomePage::HomePage(QWidget *parent) :
 
     connect(TcpServer::getInstance(),&TcpServer::sendClientData,this,&HomePage::clientDataRcevice);
 
+    init();
+
     m_numToString_hash.insert(1,"one");
     m_numToString_hash.insert(2,"two");
     m_numToString_hash.insert(3,"three");
@@ -51,6 +53,45 @@ HomePage::~HomePage()
     delete ui;
 }
 
+void HomePage::init()
+{
+    m_customPlot = new QCustomPlot(this);
+    m_customPlot->setParent(ui->widget_curve);
+    m_customPlot->resize(ui->widget_curve->size());
+
+    m_keyAxis = m_customPlot->xAxis;
+    m_valueAxis = m_customPlot->yAxis;
+    m_fossil = new QCPBars(m_keyAxis, m_valueAxis);  // 使用xAxis作为柱状图的key轴，yAxis作为value轴
+
+    m_fossilData << 0 << 0 << 0 << 0 << 0 << 0 << 0 << 0;
+
+    m_fossil->setAntialiased(false); // 为了更好的边框效果，关闭抗齿锯
+    m_fossil->setName("Fossil fuels"); // 设置柱状图的名字，可在图例中显示
+    m_fossil->setPen(QPen(QColor(0, 168, 140).lighter(130))); // 设置柱状图的边框颜色
+    m_fossil->setBrush(QColor(0, 168, 140));  // 设置柱状图的画刷颜色
+
+    // 为柱状图设置一个文字类型的key轴，ticks决定了轴的范围，而labels决定了轴的刻度文字的显示
+    QVector<QString> labels;
+    m_ticks << 1 << 2 << 3 << 4 << 5 << 6 << 7 << 8;
+    labels << "设备1" << "设备2" << "设备3" << "设备4" << "设备5" << "设备6" << "设备7" << "设备8";
+    QSharedPointer<QCPAxisTickerText> textTicker(new QCPAxisTickerText);
+    textTicker->addTicks(m_ticks, labels);
+
+    m_keyAxis->setTicker(textTicker);        // 设置为文字轴
+
+    m_keyAxis->setTickLabelRotation(60);     // 轴刻度文字旋转60度
+    m_keyAxis->setSubTicks(false);           // 不显示子刻度
+    m_keyAxis->setTickLength(0, 4);          // 轴内外刻度的长度分别是0,4,也就是轴内的刻度线不显示
+    m_keyAxis->setRange(0, 8);               // 设置范围
+    m_keyAxis->setUpperEnding(QCPLineEnding::esSpikeArrow);
+
+    m_valueAxis->setRange(0, 12.1);
+    m_valueAxis->setPadding(35);             // 轴的内边距，可以到QCustomPlot之开始（一）看图解
+    m_valueAxis->setLabel("PM2.5浓度(μg/m³)");
+    m_valueAxis->setUpperEnding(QCPLineEnding::esSpikeArrow);
+    m_fossil->setData(m_ticks, m_fossilData);
+}
+
 void HomePage::btnSetEnable(bool bl)
 {
     ui->btn_set_one->setEnabled(bl);
@@ -77,6 +118,13 @@ void HomePage::on_btn_set_clicked()
 
 void HomePage::clientDataRcevice(ClientData data)
 {
+    static int maxData = 0;
+    maxData = (data.result > maxData) ? data.result : maxData;
+    m_valueAxis->setRangeUpper(maxData+10);
+    m_fossilData[data.deviceNum - 1] = data.result;
+    m_fossil->setData(m_ticks, m_fossilData);
+    m_customPlot->replot();
+
     QString numEnglish = m_numToString_hash.value(data.deviceNum);
     if(m_isAllOnline.contains(data.deviceNum))
     {
