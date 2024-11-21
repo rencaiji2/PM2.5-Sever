@@ -20,20 +20,18 @@ public:
 
 private slots:
     void on_btn_set_clicked();
-    void on_setbtn_clicked();
     void on_timer_slot();
+
+    void on_tableWidget_cellClicked(int row, int column);
 
 private:
     void clientDataRcevice(ClientData data);
-    void btnSetEnable(bool bl);
     void init();
 
 private:
     Ui::HomePage *ui;
 
     bool m_isCheckSet;
-    QHash <int,QString>m_numToString_hash;
-    QHash <QString,int>m_stringToInt_hash;
     std::vector<uint8_t> m_uint8Vector;
     QTimer m_timer;
     QHash <int,bool>m_isAllOnline;   //判断所有设备上线下线
@@ -43,6 +41,7 @@ private:
     QCPBars *m_fossil;
     QVector<double> m_fossilData;
     QVector<double> m_ticks;
+    int m_maxData;
 };
 
 #endif // HOMEPAGE_H

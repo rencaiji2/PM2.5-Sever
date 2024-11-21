@@ -7,7 +7,14 @@ HomePage::HomePage(QWidget *parent) :
     ui(new Ui::HomePage)
 {
     ui->setupUi(this);
-    ui->btn_set->setStyleSheet("font-size: 20pt; color: white;background-color: gray;");
+    m_maxData = 0;
+    ui->checkBox_isWork->setChecked(true);
+    ui->btn_set->setStyleSheet("QPushButton {"
+                               "    background-color: lightgray;font-size: 20pt;" // 默认背景颜色
+                               "}"
+                               "QPushButton:pressed {"
+                               "    background-color: blue;font-size: 20pt;" // 按下时的背景颜色
+                               "}");
     m_isCheckSet = false;
 
     for(int i=1; i<9; i++)
@@ -21,29 +28,7 @@ HomePage::HomePage(QWidget *parent) :
 
     init();
 
-    m_numToString_hash.insert(1,"one");
-    m_numToString_hash.insert(2,"two");
-    m_numToString_hash.insert(3,"three");
-    m_numToString_hash.insert(4,"four");
-    m_numToString_hash.insert(5,"five");
-    m_numToString_hash.insert(6,"six");
-    m_numToString_hash.insert(7,"seven");
-    m_numToString_hash.insert(8,"eight");
 
-    m_stringToInt_hash.insert("btn_set_one",1);
-    m_stringToInt_hash.insert("btn_set_two",2);
-    m_stringToInt_hash.insert("btn_set_three",3);
-    m_stringToInt_hash.insert("btn_set_four",4);
-    m_stringToInt_hash.insert("btn_set_five",5);
-    m_stringToInt_hash.insert("btn_set_six",6);
-    m_stringToInt_hash.insert("btn_set_seven",7);
-    m_stringToInt_hash.insert("btn_set_eight",8);
-
-    btnSetEnable(false);
-    connect(ui->btn_set_one,&QPushButton::clicked, this, &HomePage::on_setbtn_clicked);
-    connect(ui->btn_set_two,&QPushButton::clicked, this, &HomePage::on_setbtn_clicked);
-    connect(ui->btn_set_three,&QPushButton::clicked, this, &HomePage::on_setbtn_clicked);
-    connect(ui->btn_set_four,&QPushButton::clicked, this, &HomePage::on_setbtn_clicked);
     m_uint8Vector = {0xea,0xea,0,0,0,0,0,0xeb,0xeb};
 
 }
@@ -79,10 +64,10 @@ void HomePage::init()
 
     m_keyAxis->setTicker(textTicker);        // 设置为文字轴
 
-    m_keyAxis->setTickLabelRotation(60);     // 轴刻度文字旋转60度
+    //m_keyAxis->setTickLabelRotation(60);     // 轴刻度文字旋转60度
     m_keyAxis->setSubTicks(false);           // 不显示子刻度
     m_keyAxis->setTickLength(0, 4);          // 轴内外刻度的长度分别是0,4,也就是轴内的刻度线不显示
-    m_keyAxis->setRange(0, 8);               // 设置范围
+    m_keyAxis->setRange(0, 9);               // 设置范围
     m_keyAxis->setUpperEnding(QCPLineEnding::esSpikeArrow);
 
     m_valueAxis->setRange(0, 12.1);
@@ -90,95 +75,105 @@ void HomePage::init()
     m_valueAxis->setLabel("PM2.5浓度(μg/m³)");
     m_valueAxis->setUpperEnding(QCPLineEnding::esSpikeArrow);
     m_fossil->setData(m_ticks, m_fossilData);
+
+    // 设置横轴和纵轴标签的字体大小
+    QFont labelFont("Arial", 12); // 设置字体为 Arial，大小为 12
+    m_customPlot->xAxis->setLabelFont(labelFont);
+    m_customPlot->yAxis->setLabelFont(labelFont);
+
+    // 设置横轴和纵轴刻度标签的字体大小
+    QFont tickLabelFont("Arial", 10); // 设置字体为 Arial，大小为 10
+    m_customPlot->xAxis->setTickLabelFont(tickLabelFont);
+    m_customPlot->yAxis->setTickLabelFont(tickLabelFont);
+
+    ui->tableWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+    ui->tableWidget->setSelectionBehavior(QAbstractItemView::SelectRows);
+
+    for(int i=0; i<8; i++)
+    {
+        ui->tableWidget->setItem(i,0,new QTableWidgetItem(QString::number(i+1)));
+
+        ui->tableWidget->setRowHeight(i, 50); //设置行高
+    }
+
 }
 
-void HomePage::btnSetEnable(bool bl)
-{
-    ui->btn_set_one->setEnabled(bl);
-    ui->btn_set_two->setEnabled(bl);
-    ui->btn_set_three->setEnabled(bl);
-    ui->btn_set_four->setEnabled(bl);
-}
 
 void HomePage::on_btn_set_clicked()
 {
-    if(m_isCheckSet == false)
+    QTimer::singleShot(50000, this, [this]()
     {
-        m_isCheckSet = true;
-        btnSetEnable(true);
-        ui->btn_set->setStyleSheet("font-size: 20pt; color: black;background-color: rgb(51, 153, 255);");
-    }
-    else
-    {
-        m_isCheckSet = false;
-        btnSetEnable(false);
-        ui->btn_set->setStyleSheet("font-size: 20pt; color: white;background-color: gray;");
-    }
+        ui->btn_set->setEnabled(true);
+    });
+    SendToClient senddata;
+    senddata.deviceNum_send = ui->comboBox_devNum->currentIndex()+1;
+    senddata.isNowConcentration_send = ui->checkBox_isWork->isChecked();
+    senddata.acquisitionInterval_send = ui->comboBox_acquisitionInterval->currentIndex()+1;;
+    m_uint8Vector[2] = senddata.deviceNum_send;
+    m_uint8Vector[3] = senddata.isNowConcentration_send;
+    m_uint8Vector[4] = senddata.acquisitionInterval_send;
+
+    TcpServer::getInstance()->sendData(m_uint8Vector,8080 + senddata.deviceNum_send);
 }
 
 void HomePage::clientDataRcevice(ClientData data)
 {
-    static int maxData = 0;
-    maxData = (data.result > maxData) ? data.result : maxData;
-    m_valueAxis->setRangeUpper(maxData+10);
+    m_maxData = (data.result > m_maxData) ? data.result : m_maxData;
+    m_valueAxis->setRangeUpper(m_maxData+10);
     m_fossilData[data.deviceNum - 1] = data.result;
     m_fossil->setData(m_ticks, m_fossilData);
     m_customPlot->replot();
 
-    QString numEnglish = m_numToString_hash.value(data.deviceNum);
     if(m_isAllOnline.contains(data.deviceNum))
     {
         m_isAllOnline[data.deviceNum] = true;
     }
-    if(numEnglish != NULL)
-    {
-        this->findChild<QLabel*>("label_isOnline_"+numEnglish)->setText("设备已上线");
-        this->findChild<QLabel*>("label_isOnline_"+numEnglish)->setStyleSheet("color:red;");
-        this->findChild<QLabel*>("label_result_"+numEnglish)->setText(QString::number(data.result)+"μg/m³");
-        if(!m_isCheckSet)
-        {
-            this->findChild<QCheckBox*>("checkBox_isWork_"+numEnglish)->setChecked(data.isNowConcentration);
-            this->findChild<QComboBox*>("comboBox_acquisitionInterval_"+numEnglish)->setCurrentIndex(data.acquisitionInterval-1);
-        }
-    }
+
+    QTableWidgetItem *_result = new QTableWidgetItem(QString::number(data.result));
+    _result->setTextAlignment(Qt::AlignHCenter | Qt::AlignVCenter);  //居中显示
+    ui->tableWidget->setItem(data.deviceNum-1,1,_result);
+
+    QTableWidgetItem *_isWork = new QTableWidgetItem(data.isNowConcentration ? "是" : "否");
+    _isWork->setTextAlignment(Qt::AlignHCenter | Qt::AlignVCenter);  //居中显示
+    ui->tableWidget->setItem(data.deviceNum-1,2,_isWork);
+
+    QTableWidgetItem *acquisitionInterval = new QTableWidgetItem(QString::number(data.acquisitionInterval)+"s");
+    acquisitionInterval->setTextAlignment(Qt::AlignHCenter | Qt::AlignVCenter);  //居中显示
+    ui->tableWidget->setItem(data.deviceNum-1,3,acquisitionInterval);
+
+    QTableWidgetItem *_isOnline = new QTableWidgetItem("设备已上线");
+    _isOnline->setForeground(Qt::red);
+    _isOnline->setTextAlignment(Qt::AlignHCenter | Qt::AlignVCenter);  //居中显示
+    ui->tableWidget->setItem(data.deviceNum-1,4,_isOnline);
 }
 
-void HomePage::on_setbtn_clicked()
-{
-    SendToClient senddata;
-    QObject *senderObj = sender();
-    if (senderObj)
-    {
-       QPushButton *button = qobject_cast<QPushButton*>(senderObj);
-       if (button)
-       {
-           senddata.deviceNum_send = m_stringToInt_hash.value(button->objectName());
-           senddata.isNowConcentration_send = this->findChild<QCheckBox*>("checkBox_isWork_"+ m_numToString_hash.value(m_stringToInt_hash.value(button->objectName())))->isChecked();
-           senddata.acquisitionInterval_send = this->findChild<QComboBox*>("comboBox_acquisitionInterval_"+ m_numToString_hash.value(m_stringToInt_hash.value(button->objectName())))->currentIndex()+1;
-           m_uint8Vector[2] = senddata.deviceNum_send;
-           m_uint8Vector[3] = senddata.isNowConcentration_send;
-           m_uint8Vector[4] = senddata.acquisitionInterval_send;
-
-           TcpServer::getInstance()->sendData(m_uint8Vector,8080 + senddata.deviceNum_send);
-       }
-    }
-}
 
 void HomePage::on_timer_slot()
 {
-    for(int i=1; i<3; i++)
+    m_maxData = 0;
+    for(int i=0; i<8; i++)
     {
-        QString numEnglish = m_numToString_hash.value(i);
-        if(m_isAllOnline[i] == true)
+        QString text = "";
+        if(ui->tableWidget->item(i, 4) != 0)
         {
-            this->findChild<QLabel*>("label_isOnline_"+numEnglish)->setText("设备已上线");
-            this->findChild<QLabel*>("label_isOnline_"+numEnglish)->setStyleSheet("color:red;");
-            m_isAllOnline[i] = false;
+            text = ui->tableWidget->item(i, 4)->text();
         }
-        else
+        if(m_isAllOnline[i+1] == true)
         {
-            this->findChild<QLabel*>("label_isOnline_"+numEnglish)->setText("设备已下线！");
-            this->findChild<QLabel*>("label_isOnline_"+numEnglish)->setStyleSheet("color:gray;");
+            m_isAllOnline[i+1] = false;
+        }
+        else if(text == "设备已上线" && m_isAllOnline[i+1] == false)
+        {
+            QTableWidgetItem *_isOnline = new QTableWidgetItem("设备已下线！");
+            _isOnline->setForeground(Qt::gray);
+            _isOnline->setTextAlignment(Qt::AlignHCenter | Qt::AlignVCenter);  //居中显示
+            ui->tableWidget->setItem(i,4,_isOnline);
         }
     }
+}
+
+
+void HomePage::on_tableWidget_cellClicked(int row, int column)
+{
+    ui->comboBox_devNum->setCurrentIndex(row);
 }
