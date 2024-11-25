@@ -47,6 +47,9 @@ DrawCurve::DrawCurve(QWidget *parent) :
     dateTicker->setDateTimeFormat("yy-MM-dd hh:mm:ss");//日期格式(可参考QDateTime::fromString()函数)
     m_customPlot->xAxis->setTicker(dateTicker);//设置X轴为时间轴
 
+    m_devNum = 1;
+    m_timeSection = 15*60;
+
     connect(TcpServer::getInstance(),&TcpServer::sendClientData,this,&DrawCurve::clientDataRcevice);
     m_isCanRefensh = true;
     connect(&m_timer, &QTimer::timeout,this,&DrawCurve::on_timer_slot);
@@ -71,6 +74,7 @@ void DrawCurve::clientDataRcevice(ClientData data)
         m_customPlot->xAxis->setRangeUpper(QDateTime::currentSecsSinceEpoch()+10);
         m_customPlot->yAxis->setRangeUpper(dataMax + 5);
     }
+    CalculateMaximumMeanMinimum(data);
 }
 
 void DrawCurve::on_timer_slot()
@@ -129,5 +133,54 @@ void DrawCurve::Replot()
     if(m_isCanRefensh)
     {
         m_customPlot->replot();
+    }
+}
+
+void DrawCurve::on_comboBox_devNumSelect_currentIndexChanged(int index)
+{
+    m_devNum = index + 1;
+}
+
+void DrawCurve::on_comboBox_timeSelect_currentIndexChanged(int index)
+{
+    if(index == 0)
+    {
+        m_timeSection = 15;
+    }
+    else if(index == 1)
+    {
+        m_timeSection = 30;
+    }
+    else if(index == 2)
+    {
+        m_timeSection = 60;
+    }
+    else if(index == 3)
+    {
+        m_timeSection = 120;
+    }
+    m_timeSection = m_timeSection * 60;
+}
+
+void DrawCurve::CalculateMaximumMeanMinimum(ClientData data)
+{
+    if(data.deviceNum == m_devNum)
+    {
+        qint64 nowTime = QDateTime::currentSecsSinceEpoch();
+        QList<QVector<double>> thisVector = m_drawData[data.deviceNum];
+        QVector<double> resultVector = thisVector.at(1);
+        if(nowTime - thisVector.at(0).at(0) > m_timeSection)
+        {
+            for (int i=0; i<thisVector.at(0).size(); i++)
+            {
+                if(nowTime - thisVector.at(0).at(i) <= m_timeSection)
+                {
+                    resultVector = thisVector[1].mid(i, thisVector[1].size()-i-1);
+                }
+            }
+        }
+        ui->label_argve->setText("平均值："+QString::number(std::accumulate(resultVector.begin(), resultVector.end(), 0.0) / resultVector.size())+" μg/m³");
+        ui->label_max->setText("最大值："+QString::number(*std::max_element(std::begin(resultVector), std::end(resultVector)))+" μg/m³");
+        ui->label_min->setText("最小值："+QString::number(*std::min_element(std::begin(resultVector), std::end(resultVector)))+" μg/m³");
     }
 }

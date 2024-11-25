@@ -18,8 +18,8 @@
     <rect>
      <x>200</x>
      <y>50</y>
-     <width>991</width>
-     <height>551</height>
+     <width>1061</width>
+     <height>661</height>
     </rect>
    </property>
   </widget>
@@ -202,6 +202,120 @@ background:block;}</string>
    </property>
    <property name="text">
     <string>刷新间隔：</string>
+   </property>
+  </widget>
+  <widget class="QComboBox" name="comboBox_timeSelect">
+   <property name="geometry">
+    <rect>
+     <x>1280</x>
+     <y>290</y>
+     <width>100</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QWidget{font-size: 15pt;}</string>
+   </property>
+   <item>
+    <property name="text">
+     <string>15分钟</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>30分钟</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>1小时</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>2小时</string>
+    </property>
+   </item>
+  </widget>
+  <widget class="QComboBox" name="comboBox_devNumSelect">
+   <property name="geometry">
+    <rect>
+     <x>1280</x>
+     <y>240</y>
+     <width>100</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QWidget{font-size: 15pt;}</string>
+   </property>
+   <item>
+    <property name="text">
+     <string>设备1</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>设备2</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>设备3</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>设备4</string>
+    </property>
+   </item>
+  </widget>
+  <widget class="QLabel" name="label_argve">
+   <property name="geometry">
+    <rect>
+     <x>1280</x>
+     <y>350</y>
+     <width>201</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QWidget{font-size: 15pt;}</string>
+   </property>
+   <property name="text">
+    <string>平均值：</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_max">
+   <property name="geometry">
+    <rect>
+     <x>1280</x>
+     <y>410</y>
+     <width>221</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QWidget{font-size: 15pt;}</string>
+   </property>
+   <property name="text">
+    <string>最大值：</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_min">
+   <property name="geometry">
+    <rect>
+     <x>1280</x>
+     <y>470</y>
+     <width>221</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QWidget{font-size: 15pt;}</string>
+   </property>
+   <property name="text">
+    <string>最小值：</string>
    </property>
   </widget>
  </widget>

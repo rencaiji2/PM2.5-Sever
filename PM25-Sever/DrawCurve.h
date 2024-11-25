@@ -31,8 +31,13 @@ private slots:
 
     void on_comboBox_currentIndexChanged(int index);
 
+    void on_comboBox_devNumSelect_currentIndexChanged(int index);
+
+    void on_comboBox_timeSelect_currentIndexChanged(int index);
+
 private:
     void Replot();
+    void CalculateMaximumMeanMinimum(ClientData data);
 
 private:
     Ui::DrawCurve *ui;
@@ -45,6 +50,8 @@ private:
     QHash<int,QList<QVector<double>>> m_drawData;
     QTimer m_timer;
     bool m_isCanRefensh;  //是否可以刷新曲线
+    int m_devNum;
+    int m_timeSection;
 };
 
 #endif // DRAWCURVE_H
